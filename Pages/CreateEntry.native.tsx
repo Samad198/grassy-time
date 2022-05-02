@@ -13,7 +13,7 @@ import {
 import auth from '@react-native-firebase/auth';
 
 
-const Login: React.FC<{ navigation: any; }> = ({ navigation }) => {
+const CreateEntry: React.FC<{ navigation: any; }> = ({ navigation }) => {
     const [userEmail, setUserEmail] = useState('');
     const [userPassword, setUserPassword] = useState('');
     const [errortext, setErrortext] = useState('');
@@ -166,4 +166,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Login
+export default CreateEntry

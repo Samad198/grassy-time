@@ -4,3 +4,10 @@ export interface user {
     email: string;
     token: string;
 }
+
+export interface stat {
+    grassType: string;
+    growthRateSummer: number;
+    growthRateWinter: number;
+    baseLength: number;
+}
