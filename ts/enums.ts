@@ -4,3 +4,8 @@ export enum GrassType {
     Buffalo="Buffalo",
     Cynodon="Cynodon"
   }
+
+  export enum Season {
+    Summer="Kikuyu",
+    Winter="Kentucky Blue",
+  }

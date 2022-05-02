@@ -11,12 +11,13 @@ export interface stat {
     grassType: string;
     growthRateSummer: number;
     growthRateWinter: number;
-    baseLength: number;
+    bestLength: number;
 }
 
 export interface reminder {
-    id:number;
+    id?:number;
     date: string;
     type: GrassType;
-    nextDate:string;
+    nextDate?:string;
 }
+

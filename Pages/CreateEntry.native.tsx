@@ -5,103 +5,73 @@ import {
     View,
     Text,
     ScrollView,
-    Image,
     Keyboard,
     TouchableOpacity,
     KeyboardAvoidingView,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import { calculateNextMow, getDBConnection, getSeason, saveReminder } from '../Services/myMowingService';
+import { GrassType } from '../ts/enums';
+import { Button, ButtonGroup } from '@rneui/themed';
+import DatePicker from 'react-native-date-picker'
 
 
 const CreateEntry: React.FC<{ navigation: any; }> = ({ navigation }) => {
-    const [userEmail, setUserEmail] = useState('');
-    const [userPassword, setUserPassword] = useState('');
-    const [errortext, setErrortext] = useState('');
-    const passwordInputRef: any = createRef();
+    const grassTypes = [GrassType.Buffalo, GrassType.Cynodon, GrassType.KentuckyBlue, GrassType.Kikuyu]
+    const [date, setDate] = useState<any>(new Date());
+    const [open, setOpen] = useState<boolean>(false)
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const handleSubmitPress = async () => {
-        setErrortext('');
-        if (!userEmail) {
-            console.log('Please fill Email');
-            return;
+    const dateToISO = (input:any) => {
+        return input.toISOString().slice(0, 19).replace('T', ' ')
+    }
+    const createEntry = async () => {
+
+        try {
+            const now = dateToISO(date)
+            const next = dateToISO((await calculateNextMow(date,grassTypes[selectedIndex],getSeason())))
+            const db = await getDBConnection();
+            const item = await saveReminder(db, { date: now, type: grassTypes[selectedIndex], nextDate: next });
+            navigation.navigate('HomeScreen', { item: item })
+        } catch (error) {
+            console.error(error);
         }
-        if (!userPassword) {
-            console.log('Please fill Password');
-            return;
-        }
-        await auth().signInWithEmailAndPassword(userEmail, userPassword)
     };
-    return (
-        <View style={styles.mainBody}>
-            <ScrollView
-                keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                }}>
-                <View>
 
-                    <KeyboardAvoidingView enabled>
-                        <View style={{ alignItems: 'center' }}>
-                            <Text style={styles.title}>Grassy Time</Text>
-                        </View>
-                        <View style={styles.SectionStyle}>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(UserEmail) =>
-                                    setUserEmail(UserEmail)
-                                }
-                                placeholder="Enter Email"
-                                placeholderTextColor="#8b9cb5"
-                                autoCapitalize="none"
-                                keyboardType="email-address"
-                                returnKeyType="next"
-                                onSubmitEditing={() =>
-                                    passwordInputRef.current &&
-                                    passwordInputRef.current.focus()
-                                }
-                                underlineColorAndroid="#f000"
-                                blurOnSubmit={false}
-                            />
-                        </View>
-                        <View style={styles.SectionStyle}>
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={(UserPassword) =>
-                                    setUserPassword(UserPassword)
-                                }
-                                placeholder="Enter Password"
-                                placeholderTextColor="#8b9cb5"
-                                keyboardType="default"
-                                ref={passwordInputRef}
-                                onSubmitEditing={Keyboard.dismiss}
-                                blurOnSubmit={false}
-                                secureTextEntry={true}
-                                underlineColorAndroid="#f000"
-                                returnKeyType="next"
-                            />
-                        </View>
-                        {errortext != '' ? (
-                            <Text style={styles.errorTextStyle}>
-                                {errortext}
-                            </Text>
-                        ) : null}
-                        <TouchableOpacity
-                            style={styles.buttonStyle}
-                            activeOpacity={0.5}
-                            onPress={handleSubmitPress}>
-                            <Text style={styles.buttonTextStyle}>LOGIN</Text>
-                        </TouchableOpacity>
-                        <Text
-                            style={styles.registerTextStyle}
-                            onPress={() => navigation.navigate('Register')}>
-                            New Here ? Register
-                        </Text>
-                    </KeyboardAvoidingView>
-                </View>
-            </ScrollView>
-        </View>
+   
+    return (
+
+        <ScrollView>
+            <DatePicker
+                modal
+                open={open}
+                date={date}
+                onConfirm={(date) => {
+                    setOpen(false)
+                    setDate(date)
+                }}
+                onCancel={() => {
+                    setOpen(false)
+                }}
+            />
+            <Button title={"Choose date"} onPress={() => setOpen(true)} />
+            <Text style={{fontWeight:"bold"}}>Date:<Text style={{fontWeight:"normal"}}>{dateToISO(date)}</Text></Text>
+            
+            <Text style={{fontWeight:"bold"}}>Grass Type:</Text>
+            <ButtonGroup
+                buttons={grassTypes}
+                selectedIndex={selectedIndex}
+                onPress={(value) => {
+                    setSelectedIndex(value);
+                }}
+                containerStyle={{ marginBottom: 20 }}
+            />
+
+
+            <Button title={"Save"} onPress={createEntry} />
+
+        </ScrollView>
+
     )
 }
 const styles = StyleSheet.create({

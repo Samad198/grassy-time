@@ -10,21 +10,23 @@ import {
   FlatList
 } from 'react-native';
 import Reminder from '../Components/Reminder.native';
-import { GrassType } from '../ts/enums';
 import { reminder } from '../ts/types';
-import { getDBConnection,createTable, getReminderItems } from '../Services/db-service';
-import { Button, } from '@rneui/themed';
+import { getDBConnection, createTable, getReminderItems, deleteTable } from '../Services/myMowingService';
+import { Button, Card } from '@rneui/themed';
 
-const Home: React.FC<{navigation:any
-}> = ({navigation}) => {
-
+const Home: React.FC<{
+  navigation: any, route: any
+}> = ({ route, navigation }) => {
   const loadDataCallback = useCallback(async () => {
     try {
+
       const db = await getDBConnection();
+      // uncomment this to delete the table the first time the app is run
+      //await deleteTable(db)
       await createTable(db);
       const storedItems = await getReminderItems(db);
       setData(storedItems);
-      
+
     } catch (error) {
       console.error(error);
     }
@@ -34,28 +36,32 @@ const Home: React.FC<{navigation:any
     loadDataCallback();
   }, [loadDataCallback]);
 
-  const [data,setData] = useState<reminder[]>([])
-  // const data: reminder[] = [
-  //   { id:1,date: "someDate", type: GrassType.Kikuyu, nextDate: "someOtherDate" },
-  //   { id:2,date: "someDate", type: GrassType.Kikuyu, nextDate: "someOtherDate" },
-  //   { id:3,date: "someDate", type: GrassType.Kikuyu, nextDate: "someOtherDate" },
-  // ]
+  useEffect(() => {
+    if (route.params?.item) {
+      const item = route.params.item
+      setData(prevData => [item, ...prevData])
+    }
+  }, [route.params?.item])
+
+  const [data, setData] = useState<reminder[]>([])
+
 
   return (
-    <View>
-      
-      <FlatList    
-          style={{width:"100%"}}     
-          data={data}
-          
-          renderItem={({item}) => {
-            return (
-                <Reminder key={item.id} {...item}/>
-              
-            )
-          }}
-          ListHeaderComponent={()=><Button title="Solid" type="solid" onPress={()=>navigation.navigate("CreateEntryScreen")}/>}
-          />
+    <View >
+
+      <FlatList
+        style={{ width: "100%", height:"100%" }}
+        data={data}
+        renderItem={({ item }) => {
+          return (
+            <Card>
+              <Reminder key={item.id}  {...item} />
+            </Card>
+
+          )
+        }}
+        ListHeaderComponent={() => <Button title="Add new Entry" type="solid" onPress={() => navigation.navigate("CreateEntryScreen")}></Button>}
+      />
     </View>
   );
 };

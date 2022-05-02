@@ -9,9 +9,9 @@ import {
     View,
 } from 'react-native';
 import { GrassType } from '../ts/enums';
+import { reminder } from '../ts/types';
 
-const Reminder: React.FC<{date: string, type: GrassType, nextDate:string 
-}> = ({type,date,nextDate}) => {
+const Reminder: React.FC<reminder> = ({type,date,nextDate}) => {
 
     return (
         <View>

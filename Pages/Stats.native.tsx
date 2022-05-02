@@ -9,18 +9,12 @@ import {
     View,
     FlatList
   } from 'react-native';
+import { grassData } from '../Services/myMowingService';
 import { stat } from '../ts/types';
 
 const Stats: React.FC<{
 }> = () => {
-    const data:stat[] = 
-    [
-        {grassType:"Kikuyu",growthRateSummer:0.65,growthRateWinter:0.45,baseLength:8},
-        {grassType:"Kentucky Blue",growthRateSummer:0.65,growthRateWinter:0.45,baseLength:8},
-        {grassType:"Buffalo",growthRateSummer:0.65,growthRateWinter:0.45,baseLength:8},
-        {grassType:"Cynodon",growthRateSummer:0.65,growthRateWinter:0.45,baseLength:8},
-
-    ]
+    const data:stat[] = grassData
   return (
     <View>
         
