@@ -70,6 +70,7 @@ export const calculateNextMow = async (date:Date,type:GrassType) => {
 };
 
 export const getSeason = (date:Date) => {
+    // Todo: Make it return either winter or summer depending on the date provided
     return Season.Summer
 };
 
