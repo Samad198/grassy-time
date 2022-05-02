@@ -1,3 +1,5 @@
+import { GrassType } from "./enums";
+
 export interface user {
     id: string;
     username: string;
@@ -10,4 +12,11 @@ export interface stat {
     growthRateSummer: number;
     growthRateWinter: number;
     baseLength: number;
+}
+
+export interface reminder {
+    id:number;
+    date: string;
+    type: GrassType;
+    nextDate:string;
 }
