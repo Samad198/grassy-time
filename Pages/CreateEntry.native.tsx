@@ -11,7 +11,7 @@ import DatePicker from 'react-native-date-picker'
 
 
 const CreateEntry: React.FC<{ navigation: any; }> = ({ navigation }) => {
-    const grassTypes = [GrassType.Buffalo, GrassType.Cynodon, GrassType.KentuckyBlue, GrassType.Kikuyu]
+    const grassTypes = Object.values(GrassType)
     const [date, setDate] = useState<Date>(new Date());
     const [open, setOpen] = useState<boolean>(false)
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -20,7 +20,6 @@ const CreateEntry: React.FC<{ navigation: any; }> = ({ navigation }) => {
         return input.toISOString().slice(0, 19).replace('T', ' ')
     }
     const createEntry = async () => {
-
         try {
             const now = dateToISO(date)
             const next = dateToISO((await calculateNextMow(date,grassTypes[selectedIndex])))
@@ -32,9 +31,7 @@ const CreateEntry: React.FC<{ navigation: any; }> = ({ navigation }) => {
         }
     };
 
-   
     return (
-
         <ScrollView>
             <DatePicker
                 modal
@@ -49,9 +46,9 @@ const CreateEntry: React.FC<{ navigation: any; }> = ({ navigation }) => {
                 }}
             />
             <Button title={"Choose date"} onPress={() => setOpen(true)} />
-            <Text style={{fontWeight:"bold"}}>Date:<Text style={{fontWeight:"normal"}}>{dateToISO(date)}</Text></Text>
+            <Text style={styles.boldText}>Date:<Text style={styles.normalText}>{dateToISO(date)}</Text></Text>
             
-            <Text style={{fontWeight:"bold"}}>Grass Type:</Text>
+            <Text style={styles.boldText}>Grass Type:</Text>
             <ButtonGroup
                 buttons={grassTypes}
                 selectedIndex={selectedIndex}
@@ -61,7 +58,6 @@ const CreateEntry: React.FC<{ navigation: any; }> = ({ navigation }) => {
                 containerStyle={{ marginBottom: 20 }}
             />
 
-
             <Button title={"Save"} onPress={createEntry} />
 
         </ScrollView>
@@ -69,65 +65,14 @@ const CreateEntry: React.FC<{ navigation: any; }> = ({ navigation }) => {
     )
 }
 const styles = StyleSheet.create({
-    mainBody: {
-        flex: 1,
-        justifyContent: 'center',
-        backgroundColor: '#2fc562',
-        alignContent: 'center',
+   
+    boldText: {
+        fontWeight: 'bold', 
     },
-    title: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 100
+    normalText: {
+        fontWeight: 'normal', 
     },
-    SectionStyle: {
-        flexDirection: 'row',
-        height: 40,
-        marginTop: 20,
-        marginLeft: 35,
-        marginRight: 35,
-        margin: 10,
-    },
-    buttonStyle: {
-        backgroundColor: '#7DE24E',
-        borderWidth: 0,
-        color: '#FFFFFF',
-        borderColor: '#7DE24E',
-        height: 40,
-        alignItems: 'center',
-        borderRadius: 30,
-        marginLeft: 35,
-        marginRight: 35,
-        marginTop: 20,
-        marginBottom: 25,
-    },
-    buttonTextStyle: {
-        color: '#FFFFFF',
-        paddingVertical: 10,
-        fontSize: 16,
-    },
-    inputStyle: {
-        flex: 1,
-        paddingLeft: 15,
-        paddingRight: 15,
-        borderWidth: 1,
-        borderRadius: 30,
-        borderColor: '#dadae8',
-        backgroundColor: "white"
-    },
-    registerTextStyle: {
-        color: '#FFFFFF',
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 14,
-        alignSelf: 'center',
-        padding: 10,
-    },
-    errorTextStyle: {
-        color: 'red',
-        textAlign: 'center',
-        fontSize: 14,
-    },
+   
 });
 
 export default CreateEntry

@@ -5,7 +5,7 @@ import {
     View,
     Text,
     ScrollView,
-    Image,
+    Alert,
     Keyboard,
     TouchableOpacity,
     KeyboardAvoidingView,
@@ -20,7 +20,6 @@ const Register = ({ navigation }: LoginProps) => {
     const [userEmail, setUserEmail] = useState('');
     const [userPassword, setUserPassword] = useState('');
     const [verifyUserPassword, setVerifyUserPassword] = useState('');
-    const [loading, setLoading] = useState(false);
     const [errortext, setErrortext] = useState('');
 
     const passwordInputRef: any = createRef();
@@ -36,16 +35,16 @@ const Register = ({ navigation }: LoginProps) => {
     const handleSubmitPress = async () => {
         setErrortext('');
         if (!userEmail) {
-            console.log('Please fill Email');
+            Alert.alert('Please fill Email');
             return;
         }
         if (!userPassword) {
-            console.log('Please fill Password');
+            Alert.alert('Please fill Password');
             return;
         }
-        setLoading(true);
+
         if(!verifyPassword(userPassword,verifyUserPassword)){
-            console.log('Passwords do not match');
+            Alert.alert('Passwords do not match');
             return
         }
         
@@ -55,11 +54,11 @@ const Register = ({ navigation }: LoginProps) => {
         }
         catch (error: any) {
             if (error.code === 'auth/email-already-in-use') {
-                console.log('That email address is already in use!');
+                Alert.alert('That email address is already in use!');
             }
 
             if (error.code === 'auth/invalid-email') {
-                console.log('That email address is invalid!');
+                Alert.alert('That email address is invalid!');
             }
 
             console.error(error);
@@ -122,7 +121,7 @@ const Register = ({ navigation }: LoginProps) => {
                                 onChangeText={(UserPassword) =>
                                     setVerifyUserPassword(UserPassword)
                                 }
-                                placeholder="Verify Password" //12345
+                                placeholder="Verify Password"
                                 placeholderTextColor="#8b9cb5"
                                 keyboardType="default"
                                 ref={passwordInputRef}

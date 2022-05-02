@@ -5,10 +5,10 @@ import {
     View,
     Text,
     ScrollView,
-    Image,
     Keyboard,
     TouchableOpacity,
     KeyboardAvoidingView,
+    Alert
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 
@@ -22,14 +22,21 @@ const Login: React.FC<{ navigation: any; }> = ({ navigation }) => {
     const handleSubmitPress = async () => {
         setErrortext('');
         if (!userEmail) {
-            console.log('Please fill Email');
+            Alert.alert('Please fill Email');
             return;
         }
         if (!userPassword) {
-            console.log('Please fill Password');
+            Alert.alert('Please fill Password');
             return;
         }
-        await auth().signInWithEmailAndPassword(userEmail, userPassword)
+        try{
+            await auth().signInWithEmailAndPassword(userEmail, userPassword)
+        }
+        catch(error:any){
+            console.log(error)
+            Alert.alert("Could not log in. There was a firebase error")
+        }
+        
     };
     return (
         <View style={styles.mainBody}>

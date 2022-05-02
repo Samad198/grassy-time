@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
   View,
   FlatList
 } from 'react-native';
@@ -17,6 +11,7 @@ import { Button, Card } from '@rneui/themed';
 const Home: React.FC<{
   navigation: any, route: any
 }> = ({ route, navigation }) => {
+  const [data, setData] = useState<reminder[]>([])
   const loadDataCallback = useCallback(async () => {
     try {
 
@@ -43,14 +38,13 @@ const Home: React.FC<{
     }
   }, [route.params?.item])
 
-  const [data, setData] = useState<reminder[]>([])
+
 
 
   return (
     <View >
-
       <FlatList
-        style={{ width: "100%", height:"100%" }}
+        style={{ width: "100%", height: "100%" }}
         data={data}
         renderItem={({ item }) => {
           return (
