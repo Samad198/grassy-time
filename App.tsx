@@ -1,14 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -18,84 +8,72 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import auth, {FirebaseAuthTypes } from '@react-native-firebase/auth';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+
+import Login from './Pages/Login.native';
+import Register from './Pages/Register.native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-const Section: React.FC<{
-  title: string;
-}> = ({ children, title }) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
 
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+const UnauthedStack: React.FC<{
+}> = () => {
+  const Stack = createNativeStackNavigator();
+  return (
+    <Stack.Navigator screenOptions={{
+      headerShown: false
+    }}>
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={Register} />
+    </Stack.Navigator>
+  );
+};
+
+const AuthedStack: React.FC<{
+}> = () => {
+  const Stack = createNativeStackNavigator();
+  return (
+    <View><Text>This is what you would see when authed</Text></View>
   );
 };
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState<boolean>(true);
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>();
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+
+  // Handle user state changes
+  useEffect(() => {
+    auth().onAuthStateChanged(userState => {
+      setUser(userState);
+
+      if (initializing) {
+        setInitializing(false);
+      }
+    });
+  }, []);
+
+  if (initializing) return null;
+
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={backgroundStyle}>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={backgroundStyle}>
-          <Header />
-          <View
-            style={{
-              backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            }}>
-            <Section title="Step One">
-              Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-              screen and then come back to see your edits.
-            </Section>
-            <Section title="See Your Changes">
-              <ReloadInstructions />
-            </Section>
-            <Section title="Debug">
-              <DebugInstructions />
-            </Section>
-            <Section title="Learn More">
-              Read the docs to discover what to do next:
-            </Section>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+       <NavigationContainer>
+      {!user ?
+        <UnauthedStack />
+        :
+        <AuthedStack />
+      }
+      </NavigationContainer>
     </SafeAreaProvider>
   );
+
 };
 
 const styles = StyleSheet.create({
