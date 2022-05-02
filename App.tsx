@@ -25,6 +25,8 @@ import Home from './Pages/Home.native';
 import Settings from './Pages/Settings.native';
 import CreateEntry from './Pages/CreateEntry.native';
 
+import Icon from 'react-native-vector-icons';
+
 
 const UnauthedStack: React.FC<{
 }> = () => {
@@ -46,7 +48,12 @@ const HomeStack: React.FC<{
     <Stack.Navigator screenOptions={{
       headerShown: false
     }}>
-      <Stack.Screen name="HomeScreen" component={Home} />
+      <Stack.Screen name="HomeScreen" component={Home}
+        options={{
+          // @ts-ignore
+          tabBarIcon: () => {return <Icon name="Home"/>}
+        }}
+      />
       <Stack.Screen name="CreateEntryScreen" component={CreateEntry} />
     </Stack.Navigator>
   );

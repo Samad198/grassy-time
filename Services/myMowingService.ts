@@ -75,8 +75,8 @@ export const getSeason = () => {
 export const grassData:stat[] = 
     [
         {grassType:GrassType.Kikuyu,growthRateSummer:0.65,growthRateWinter:0.45,bestLength:8},
-        {grassType:GrassType.KentuckyBlue,growthRateSummer:0.65,growthRateWinter:0.45,bestLength:8},
-        {grassType:GrassType.Buffalo,growthRateSummer:0.65,growthRateWinter:0.45,bestLength:8},
-        {grassType:GrassType.Cynodon,growthRateSummer:0.65,growthRateWinter:0.45,bestLength:8},
+        {grassType:GrassType.KentuckyBlue,growthRateSummer:0.76,growthRateWinter:0.56,bestLength:6.5},
+        {grassType:GrassType.Buffalo,growthRateSummer:0.55,growthRateWinter:0.34,bestLength:7},
+        {grassType:GrassType.Cynodon,growthRateSummer:0.70,growthRateWinter:0.51,bestLength:6.2},
 
     ]
