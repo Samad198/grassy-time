@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "873927200771",
+    "project_id": "karri-c2771",
+    "storage_bucket": "karri-c2771.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873927200771:android:62a8f941655f1e5fa93e36",
+        "android_client_info": {
+          "package_name": "com.karri"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "873927200771-837evbcbkror4j1v2uu498mnklfn22bb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWuAJyBiO1ko7wtllWZD83DOna-p8ZAxw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "873927200771-837evbcbkror4j1v2uu498mnklfn22bb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
