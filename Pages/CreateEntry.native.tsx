@@ -1,16 +1,10 @@
-import React, { useState, createRef } from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
-    TextInput,
-    View,
     Text,
     ScrollView,
-    Keyboard,
-    TouchableOpacity,
-    KeyboardAvoidingView,
 } from 'react-native';
-import auth from '@react-native-firebase/auth';
-import { calculateNextMow, getDBConnection, getSeason, saveReminder } from '../Services/myMowingService';
+import { calculateNextMow, getDBConnection, saveReminder } from '../Services/myMowingService';
 import { GrassType } from '../ts/enums';
 import { Button, ButtonGroup } from '@rneui/themed';
 import DatePicker from 'react-native-date-picker'
@@ -18,18 +12,18 @@ import DatePicker from 'react-native-date-picker'
 
 const CreateEntry: React.FC<{ navigation: any; }> = ({ navigation }) => {
     const grassTypes = [GrassType.Buffalo, GrassType.Cynodon, GrassType.KentuckyBlue, GrassType.Kikuyu]
-    const [date, setDate] = useState<any>(new Date());
+    const [date, setDate] = useState<Date>(new Date());
     const [open, setOpen] = useState<boolean>(false)
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const dateToISO = (input:any) => {
+    const dateToISO = (input:Date) => {
         return input.toISOString().slice(0, 19).replace('T', ' ')
     }
     const createEntry = async () => {
 
         try {
             const now = dateToISO(date)
-            const next = dateToISO((await calculateNextMow(date,grassTypes[selectedIndex],getSeason())))
+            const next = dateToISO((await calculateNextMow(date,grassTypes[selectedIndex])))
             const db = await getDBConnection();
             const item = await saveReminder(db, { date: now, type: grassTypes[selectedIndex], nextDate: next });
             navigation.navigate('HomeScreen', { item: item })

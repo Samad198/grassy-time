@@ -54,7 +54,8 @@ export const deleteTable = async (db: SQLiteDatabase) => {
     await db.executeSql(query);
 };
 
-export const calculateNextMow = async (date:any,type:GrassType,season:Season) => {
+export const calculateNextMow = async (date:Date,type:GrassType) => {
+    const season = getSeason(date)
     const grassItem = grassData.find(item=>item.grassType===type)
     if(grassItem){
     const growthRate = season===Season.Summer?grassItem?.growthRateSummer:grassItem?.growthRateWinter
@@ -68,7 +69,7 @@ export const calculateNextMow = async (date:any,type:GrassType,season:Season) =>
     return copiedDate
 };
 
-export const getSeason = () => {
+export const getSeason = (date:Date) => {
     return Season.Summer
 };
 
